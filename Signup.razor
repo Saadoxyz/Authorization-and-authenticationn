@@ -1,0 +1,67 @@
+﻿@page "/signup"
+@rendermode InteractiveServer
+<h3>Sign Up</h3>
+
+@if (!IsAuthenticated)
+{
+    <p>Please sign in to access the application.</p>
+
+    <div>
+        <label for="username">Username:</label>
+        <input id="username" @bind="username" />
+    </div>
+
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" @bind="password" />
+    </div>
+
+    <button @onclick="SignIn">Sign In</button>
+}
+else
+{
+    @if (role == "1")
+    {
+        <p>You are already signed in. Welcome to the Superadmin Account, @username!</p>
+    }
+    else
+    {
+        <p>You are already signed in. Welcome to the User Account, @username!</p>
+    }
+}
+
+<div style="color: red; margin-top: 10px;">@errorMessage</div>
+<div style="color: green; margin-top: 10px;">@successMessage</div>
+
+@code {
+    private bool IsAuthenticated;
+    private string username;
+    private string password;
+    private string errorMessage;
+    private string successMessage;
+    private string role = "0"; 
+
+    private void SignIn()
+    {
+        errorMessage = string.Empty;
+        successMessage = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+        {
+            errorMessage = "Please enter both username and password.";
+            IsAuthenticated = false;
+        }
+        else if (username == "abc" && password == "123")
+        {
+            successMessage = $"Welcome, {username}!";
+            role = "1"; // Superadmin
+            IsAuthenticated = true;
+        }
+        else
+        {
+            successMessage = $"Welcome, {username}!";
+            role = "0"; // Regular User
+            IsAuthenticated = true;
+        }
+    }
+}

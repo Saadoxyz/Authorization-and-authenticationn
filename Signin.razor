@@ -1,0 +1,57 @@
+﻿@page "/signin"
+@rendermode InteractiveServer
+<h3>Sign In</h3>
+
+@if (!IsAuthenticated)
+{
+    <p>Please sign in to access the application.</p>
+
+    <div>
+        <label for="username">Username:</label>
+        <input id="username" @bind="username" />
+    </div>
+
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" @bind="password" />
+    </div>
+
+    <button @onclick="SignIn">Sign In</button>
+}
+else
+{
+    <p>You are already signed in. Welcome, @username!</p>
+}
+
+<div style="color: red; margin-top: 10px;">@errorMessage</div>
+<div style="color: green; margin-top: 10px;">@successMessage</div>
+
+@code {
+    private bool IsAuthenticated;
+    private string username;
+    private string password;
+    private string errorMessage;
+    private string successMessage;
+
+    private void SignIn()
+    {
+        errorMessage = string.Empty;
+        successMessage = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+        {
+            errorMessage = "Please enter both username and password.";
+            IsAuthenticated = false;
+        }
+        else if (username == "abc" && password == "123")
+        {
+            successMessage = $"Welcome, {username}!";
+            IsAuthenticated = true;
+        }
+        else
+        {
+            errorMessage = "Please enter correct username and password.";
+            IsAuthenticated = false;
+        }
+    }
+}
